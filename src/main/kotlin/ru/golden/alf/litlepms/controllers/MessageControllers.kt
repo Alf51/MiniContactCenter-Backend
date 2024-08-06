@@ -11,9 +11,9 @@ import kotlin.jvm.Throws
 @Controller
 @CrossOrigin(origins = ["http://localhost:3000"])
 class MessageControllers {
-
-    @SendTo("/topic/message")
-    @MessageMapping("/message")
+    //В целом метод: и принимает сообщение и потом что-то отправляет всем подписчикам
+    @SendTo("/topic/message") //Нужно указывать точно, каким слушателям отправлять и неважно, что префикс один в конфиге
+    @MessageMapping("/message") //Можно не указывать /app так как префикс один в конфиге
     @Throws(Exception::class)
     fun send(message: Message) : OutputMessage {
         println("Получено следующие сообщений от клиента: $message")
