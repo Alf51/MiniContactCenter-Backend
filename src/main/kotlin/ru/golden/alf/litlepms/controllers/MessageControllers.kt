@@ -17,6 +17,6 @@ class MessageControllers {
     @Throws(Exception::class)
     fun send(message: Message) : OutputMessage {
         println("Получено следующие сообщений от клиента: $message")
-        return OutputMessage("Ответ от сервера", "Привет из бэкенда")
+        return OutputMessage("Server", "Привет из бэкенда")
     }
 }
