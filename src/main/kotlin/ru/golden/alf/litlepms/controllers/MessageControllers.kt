@@ -23,19 +23,12 @@ class MessageControllers {
     @Throws(Exception::class)
     fun send(message: Message) : OutputMessage {
         println("Получено следующие сообщений от клиента: $message")
-        sendPrivate(message)
-        return OutputMessage("Server", "Привет ${message.from}")
+        return OutputMessage("Сообщение всем от ${message.from}", "${message.text}")
     }
 
-    @MessageMapping("app/message/private")
+    @MessageMapping("/message/private") //Указал без префикса /app. Так как не работало
     fun sendPrivate(message: Message) {
         val login = message.to
-        //todo пока отправляем тоже сообщение
-        println("логин куда отправим $login")
-        messagingTemplate.convertAndSend("/topic/message/private-$login", getFakeMessage())
-    }
-
-    private fun getFakeMessage(): Message {
-        return Message("Server", "Я отправляю приватное сообщение", "fake")
+        messagingTemplate.convertAndSend("/topic/message/private-$login", message)
     }
 }
