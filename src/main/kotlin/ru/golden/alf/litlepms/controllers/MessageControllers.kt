@@ -16,19 +16,29 @@ import kotlin.jvm.Throws
 class MessageControllers {
     @Autowired
     private lateinit var messagingTemplate: SimpMessagingTemplate
+    private val clientLoginSet: MutableSet<String> = mutableSetOf()
 
     //В целом метод: и принимает сообщение и потом что-то отправляет всем подписчикам
     @SendTo("/topic/message") //Нужно указывать точно, каким слушателям отправлять и неважно, что префикс один в конфиге
     @MessageMapping("/message") //Не нужно указывать /app так как префикс один в конфиге (не будет работать, если указать)
     @Throws(Exception::class)
     fun send(message: Message) : OutputMessage {
+        clientLoginSet.add(message.from)
         println("Получено следующие сообщений от клиента: $message")
-        return OutputMessage("Сообщение всем от ${message.from}", "${message.text}")
+        return OutputMessage("Сообщение всем от ${message.from}", message.text)
     }
 
     @MessageMapping("/message/private") //Указал без префикса /app. Так как не работало
     fun sendPrivate(message: Message) {
         val login = message.to
         messagingTemplate.convertAndSend("/topic/message/private-$login", message)
+    }
+
+    @MessageMapping("/registerLogin")
+    @SendTo("/topic/logins")
+    fun registerLogin(login: String): Set<String> {
+        clientLoginSet.add(login)
+        println("Отправил следующие логины: $clientLoginSet")
+        return clientLoginSet
     }
 }
