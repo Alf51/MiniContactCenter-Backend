@@ -14,17 +14,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfig : WebSocketMessageBrokerConfigurer {
-
-//    @Bean
-//    fun customClientOutboundChannel(): MessageChannel {
-//        return ExecutorSubscribableChannel()
-//    }
-//
-//    @Bean
-//    fun messagingTemplate(): SimpMessagingTemplate {
-//        return SimpMessagingTemplate(customClientOutboundChannel())
-//    }
-
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint("/ws").setAllowedOriginPatterns("*") //обычный эндпоинт, по которому мы будем подписываться
     }
