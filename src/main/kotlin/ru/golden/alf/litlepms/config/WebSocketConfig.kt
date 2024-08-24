@@ -19,7 +19,7 @@ class WebSocketConfig : WebSocketMessageBrokerConfigurer {
     }
 
     override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        registry.enableSimpleBroker("/topic") //врубаем простой брокер, который буде рассылать инфу всем слушателям, которые подписанны на /topic/+чёт ещё
+        registry.enableSimpleBroker("/topic") //врубаем простой брокер, который будет рассылать инфу всем слушателям, которые подписанны на /topic/+чёт ещё
         registry.setApplicationDestinationPrefixes("/app") //говорим серверу, что по этому префексу будут полученно сообщение от клиента и его нужно обработать
     }
 }

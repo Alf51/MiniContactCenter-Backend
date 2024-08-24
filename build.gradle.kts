@@ -25,6 +25,7 @@ dependencies {
 	implementation ("org.springframework.boot:spring-boot-starter-websocket")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.5")
+	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 }
 
 tasks.withType<KotlinCompile> {
