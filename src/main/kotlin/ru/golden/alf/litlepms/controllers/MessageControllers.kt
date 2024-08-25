@@ -15,13 +15,14 @@ import ru.golden.alf.litlepms.model.OutputMessage
 class MessageControllers(var messagingTemplate: SimpMessageSendingOperations) {
     //todo позже заменить на Redis
     private val clientLoginSet: MutableSet<String> = mutableSetOf()
+    //todo логирование добавить
     private val logger = KotlinLogging.logger {}
     fun deleteClientLogin(login: String) {
         this.clientLoginSet.remove(login)
     }
 
-    fun getClientLogins(): MutableSet<String> {
-        return this.clientLoginSet
+    fun addLogin(login: String) {
+        this.clientLoginSet.add(login)
     }
 
     //В целом метод: и принимает сообщение и потом что-то отправляет всем подписчикам
@@ -33,19 +34,16 @@ class MessageControllers(var messagingTemplate: SimpMessageSendingOperations) {
         return OutputMessage("Сообщение всем от ${message.from}", message.text)
     }
 
-    @MessageMapping("/message/private") //Указал без префикса /app. Так как не работало
+    @MessageMapping("/message/private") //Указал без префикса /app. Так как не работало. Спринг добавляет. Получается /app/app
     fun sendPrivate(message: Message) {
         val login = message.to
         messagingTemplate.convertAndSend("/topic/message/private-$login", message)
 
     }
 
-    @MessageMapping("/registerLogin")
-    @SendTo("/topic/onlineLogins")
-    fun registerLogin(login: String, simpMessageHeaderAccessor: SimpMessageHeaderAccessor): Set<String> {
-        this.clientLoginSet.add(login)
-        simpMessageHeaderAccessor.sessionAttributes?.put("login", login)
-        logger.info { "$login присоединился к чату" }
-        return this.clientLoginSet
+    @MessageMapping("/requestOnlineLogins")
+    fun requestOnlineLogins(simpMessageHeaderAccessor: SimpMessageHeaderAccessor) {
+        val login = simpMessageHeaderAccessor.sessionAttributes?.get("login") as String
+        messagingTemplate.convertAndSend( "/topic/onlineLogins/${login}", this.clientLoginSet)
     }
 }
