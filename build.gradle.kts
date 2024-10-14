@@ -26,6 +26,20 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.5")
 	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
+	// Добавляем зависимости Spring Security
+	implementation ("org.springframework.security:spring-security-config")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.security:spring-security-messaging:6.3.3")
+	implementation("org.springframework:spring-messaging:6.1.13")
+
+
+	implementation("com.auth0:java-jwt:4.4.0")
+
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.3.3")
+
+
+	runtimeOnly("com.h2database:h2:2.3.232")
 }
 
 tasks.withType<KotlinCompile> {

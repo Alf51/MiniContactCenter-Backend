@@ -34,6 +34,7 @@ class WebSocketEventListener(
     @EventListener
     fun onConnectEvent(event: SessionConnectEvent) {
         val stompAccessorHeader: StompHeaderAccessor = StompHeaderAccessor.wrap(event.message)
+        //todo можно логин вытаскивать из ауф токена
         val login: String = stompAccessorHeader.getFirstNativeHeader("login")!!
 
         stompAccessorHeader.sessionAttributes?.put("login", login)

@@ -1,6 +1,5 @@
 package ru.golden.alf.litlepms.controllers
 
-import mu.KotlinLogging
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor
@@ -10,13 +9,14 @@ import org.springframework.web.bind.annotation.CrossOrigin
 import ru.golden.alf.litlepms.model.Message
 import ru.golden.alf.litlepms.model.OutputMessage
 
+
 @Controller
 @CrossOrigin(origins = ["http://localhost:3000"])
 class MessageControllers(var messagingTemplate: SimpMessageSendingOperations) {
     //todo позже заменить на Redis
     private val clientLoginSet: MutableSet<String> = mutableSetOf()
     //todo логирование добавить
-    private val logger = KotlinLogging.logger {}
+//    private val logger = KotlinLogging.logger {}
     fun deleteClientLogin(login: String) {
         this.clientLoginSet.remove(login)
     }
@@ -46,4 +46,5 @@ class MessageControllers(var messagingTemplate: SimpMessageSendingOperations) {
         val login = simpMessageHeaderAccessor.sessionAttributes?.get("login") as String
         messagingTemplate.convertAndSend( "/topic/onlineLogins/${login}", this.clientLoginSet)
     }
+
 }
